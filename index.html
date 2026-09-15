@@ -144,7 +144,6 @@ input, textarea, select { font-family: inherit; }
   filter: brightness(1.12) saturate(1) drop-shadow(10px 16px 22px rgba(0,0,0,.75));
   z-index: 4;
 }
-.book-spine.is-wide img { width: 100%; height: 100%; object-fit: fill; }
 .book-spine.is-empty { cursor: default; filter: brightness(.5) saturate(.7) drop-shadow(2px 4px 7px rgba(0,0,0,.6)); }
 .book-spine.is-pending { filter: brightness(.6) saturate(.75) drop-shadow(3px 6px 10px rgba(0,0,0,.7)); }
 .book-spine.is-pending:hover { filter: brightness(.92) saturate(.95) drop-shadow(9px 14px 20px rgba(0,0,0,.75)); }
@@ -1185,7 +1184,6 @@ const stories = [
     href:     'relatos/no-te-vas-a-quedar.html',
     spine:    'img/lomos/notevasaquedar.png',
     ratio:    0.2071,
-    wide:     true,
     height:   84,
   },
   {
@@ -1275,7 +1273,7 @@ function renderShelf() {
 
   stories.forEach(story => {
     const b = document.createElement('button');
-    b.className = 'book-spine' + (story.pending ? ' is-pending' : '') + (story.wide ? ' is-wide' : '');
+    b.className = 'book-spine' + (story.pending ? ' is-pending' : '');
     b.type = 'button';
     b.setAttribute('role', 'listitem');
     b.dataset.storyId = story.id;
@@ -1296,7 +1294,9 @@ function renderShelf() {
 // Llena la balda: primero lomos vacíos con su ancho natural y, al final, el
 // sobrante se le da al primer libro para que llegue pegado al montante.
 function llenarFila(fila, relleno) {
-  const anchoDe = n => n.getBoundingClientRect().width;
+  // offsetWidth ignora las transformaciones: si no, la inclinación con la
+  // que entran los lomos falsea la medida y la balda queda a medio llenar
+  const anchoDe = n => n.offsetWidth;
   const usado = () => [...fila.children].reduce((t, n) => t + anchoDe(n), 0)
                     + fila.clientWidth * 0.0016 * Math.max(0, fila.children.length - 1);
   const libre = () => fila.clientWidth - usado();
@@ -1317,13 +1317,6 @@ function llenarFila(fila, relleno) {
     i++;
   }
 
-  // el sobrante engorda el primer libro, sin pasarse
-  const primero = fila.querySelector('.book-spine.is-wide');
-  if (primero) {
-    const sobra = libre();
-    const propio = anchoDe(primero);
-    if (sobra > 1) primero.style.width = Math.min(propio + sobra, propio * 2.1) + 'px';
-  }
 }
 
 
@@ -1547,7 +1540,6 @@ function turnPage(dir) {
   if (turning || destino < 0 || destino >= bookPages.length) return;
   turning = true;
   btnPrev.disabled = btnNext.disabled = true;
-  sonarHoja();
 
   const iFrente = dir === 1 ? bookSpread + 1 : destino + 1;
   const iDorso  = dir === 1 ? destino        : bookSpread;
@@ -1841,60 +1833,6 @@ window.addEventListener('resize', () => {
     renderSpread();
   }, 200);
 });
-
-// ══════════════════════════════════════════════════════════
-//  EL SONIDO DE LA HOJA
-//  Sintetizado en el navegador: ruido filtrado con un barrido de
-//  frecuencia, que es lo que suena cuando el papel roza. Sin archivos.
-// ══════════════════════════════════════════════════════════
-let audio = null;
-
-function contextoAudio() {
-  if (audio) return audio;
-  const AC = window.AudioContext || window.webkitAudioContext;
-  if (!AC) return null;
-  audio = new AC();
-  return audio;
-}
-
-function sonarHoja() {
-  const ctx = contextoAudio();
-  if (!ctx) return;
-  if (ctx.state === 'suspended') ctx.resume();
-
-  const t = ctx.currentTime;
-  const dur = 0.46;
-
-  // ruido blanco: la materia prima del roce
-  const buffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
-  const datos = buffer.getChannelData(0);
-  for (let i = 0; i < datos.length; i++) datos[i] = Math.random() * 2 - 1;
-
-  const fuente = ctx.createBufferSource();
-  fuente.buffer = buffer;
-
-  // el barrido de agudos es lo que da la sensación de hoja que pasa
-  const banda = ctx.createBiquadFilter();
-  banda.type = 'bandpass';
-  banda.Q.value = 0.7;
-  banda.frequency.setValueAtTime(650, t);
-  banda.frequency.exponentialRampToValueAtTime(2300, t + 0.2);
-  banda.frequency.exponentialRampToValueAtTime(900, t + dur);
-
-  const corte = ctx.createBiquadFilter();   // fuera los graves, que suenan a golpe
-  corte.type = 'highpass';
-  corte.frequency.value = 500;
-
-  const volumen = ctx.createGain();
-  volumen.gain.setValueAtTime(0.0001, t);
-  volumen.gain.linearRampToValueAtTime(0.014, t + 0.11);   // entra despacio, sin chasquido
-  volumen.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-
-  fuente.connect(banda).connect(corte).connect(volumen).connect(ctx.destination);
-  fuente.start(t);
-  fuente.stop(t + dur);
-}
-
 
 // ══════════════════════════════════════════════════════════
 //  DÍA Y NOCHE
