@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luanna y Mateo — Bloc de notas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #F2F0ED;
+      --ink:        #1B1919;
+      --ink-soft:   #6A6260;
+      --rule:       #D3CBC5;
+      --accent:     #4C3F5E;
+      --accent-dim: #8B7EAA;
+      --drop-cap:   #3A3050;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:         #100F12;
+        --ink:        #EAE6E2;
+        --ink-soft:   #8A8480;
+        --rule:       #242129;
+        --accent:     #9B88BB;
+        --accent-dim: #6B5E8A;
+        --drop-cap:   #B8A8D4;
+      }
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Lora', Georgia, 'Times New Roman', serif;
+      font-size: 18px;
+      line-height: 1.85;
+      padding-inline: 20px;
+    }
+
+    /* ── Navegación de regreso ── */
+    .back-nav {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 1.4rem 0 0;
+    }
+
+    .back-nav a {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .back-nav a:hover {
+      color: var(--accent);
+    }
+
+    .book {
+      max-width: 660px;
+      margin: 0 auto;
+      padding-block: 60px 80px;
+    }
+
+    /* ── Portada ── */
+    .cover {
+      text-align: center;
+      padding-block: 80px 100px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 80px;
+    }
+
+    .cover-eyebrow {
+      font-family: 'Lora', serif;
+      font-size: 12px;
+      font-style: italic;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 32px;
+      display: block;
+    }
+
+    .cover-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(52px, 11vw, 88px);
+      font-weight: 300;
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+
+    .cover-subtitle {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 21px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--ink-soft);
+      margin-bottom: 56px;
+    }
+
+    .cover-rule {
+      display: block;
+      width: 36px;
+      height: 1px;
+      background: var(--accent-dim);
+      margin: 0 auto;
+    }
+
+    /* ── Texto corrido ── */
+    .narrative p {
+      margin-bottom: 1.5em;
+      font-size: 18px;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .narrative p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Drop cap solo en el primer párrafo de todo el relato */
+    .narrative p.drop-cap::first-letter {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 4.6em;
+      font-weight: 500;
+      line-height: 0.78;
+      color: var(--drop-cap);
+      float: left;
+      margin-right: 0.07em;
+      margin-top: 0.12em;
+      padding-right: 0.02em;
+    }
+
+    /* Separador de escena */
+    .scene-break {
+      text-align: center;
+      color: var(--accent-dim);
+      letter-spacing: 0.5em;
+      margin-block: 52px;
+      font-size: 13px;
+      user-select: none;
+    }
+
+    /* Pull-quote */
+    .pull {
+      border-left: 2px solid var(--accent-dim);
+      padding: 6px 0 6px 24px;
+      margin-block: 44px;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(21px, 3.8vw, 28px);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1.4;
+    }
+
+    /* Pie del libro */
+    .book-footer {
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid var(--rule);
+      text-align: center;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 2.2;
+    }
+
+    .view-count {
+      font-family: 'Lora', Georgia, serif;
+      font-style: normal;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--ink-soft);
+      opacity: 0.6;
+    }
+
+    @media (max-width: 480px) {
+      body { font-size: 16px; }
+      .book { padding-block: 40px 60px; }
+      .cover { padding-block: 56px 72px; }
+      .narrative p { text-align: left; hyphens: none; }
+    }
+
+    /* ── Entradas del diario ─────────────────── */
+    .entry-date {
+      font-family: 'Lora', Georgia, serif;
+      font-weight: 500;
+      font-size: .72rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-align: center;
+      margin: 3.5rem 0 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--rule);
+      clear: both;
+    }
+    .narrative > .entry-date:first-child { margin-top: 0; }
+
+    /* ── Fotografías ─────────────────────────── */
+    figure.photo {
+      margin: 2.5rem 0;
+      clear: both;
+    }
+    figure.photo img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 3px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.18);
+    }
+    figure.photo.gallery .gallery-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .6rem;
+    }
+    figure.photo.gallery img {
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      max-width: 100%;
+    }
+    @media (max-width: 500px) {
+      figure.photo.gallery .gallery-row { grid-template-columns: 1fr 1fr; }
+      figure.photo.gallery img:nth-child(3) { grid-column: 1 / -1; aspect-ratio: 16 / 10; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="back-nav">
+  <a href="../index.html">← Bloc de notas</a>
+</nav>
+
+<div class="book">
+
+  <div class="cover">
+    <span class="cover-eyebrow">Cartas a mis hijos</span>
+    <h1 class="cover-title">Luanna y Mateo</h1>
+    <p class="cover-subtitle">Diego Dávila</p>
+    <span class="cover-rule"></span>
+  </div>
+
+  <div class="narrative">
+
+    <figure class="photo">
+      <img src="../img/lm-01.jpg" alt="Luanna de bebé, en casa, 2018" loading="lazy">
+    </figure>
+
+    <h2 class="entry-date">Jueves 04 de octubre de 2018</h2>
+
+    <p class="drop-cap">Ahora cantas y das vueltas como bailando, duermes menos de día y más de noche, te encanta la música, así que te he creado dos listas de reproducción, una más infantil que la otra. Cada vez te gusta más tocar la batería (espero ser un buen profesor).</p>
+
+    <p>Ya conoces los dulces, tus favoritos son las lentejas y chupetines.</p>
+
+    <figure class="photo">
+      <img src="../img/lm-02.jpg" alt="Luanna cerca de cumplir tres años, 2020" loading="lazy">
+    </figure>
+
+    <h2 class="entry-date">Miércoles 10 de junio de 2020</h2>
+
+    <p>Estás cerca a cumplir 3 años y ahora no paras de hablar, copias todo, te pones de muy mal humor cuando tienes sueño, pero también comes sola, tampoco usas más pañales, porque ahora avisas cuando quieres hacer pis o cuando es popó.Te encanta jugar con tu primo a quien has bautizado como Bebé Hugo, suelen quitarse los juguetes y terminan enojados, pero igual pides verlo todos los días.</p>
+
+    <p>Cuando mamá o papá están ocupados, juegas sola en tu cuarto abarrotado de juguetes, peluches, y muchas cosas. Tus favoritos; tus bebés, tu mesa de maquillaje, tu estetoscopio para jugar al doctor y tu cocinita, donde siempre preparas ricos helados.</p>
+
+    <figure class="photo">
+      <img src="../img/lm-03.jpg" alt="Luanna a los cinco años, 2022" loading="lazy">
+    </figure>
+
+    <h2 class="entry-date">Lunes 11 de julio de 2022</h2>
+
+    <p>Acabas de cumplir 5 años, ya eres una niña grande, despiertas temprano de lunes a viernes para ir al colegio, son pesadas las mañanas, pero te motiva el haber hecho buenos amigos en el aula, aún haces uno que otro berrinche, pero por lo general te portas muy bien, entiendes cuando se te explica algo y negocias cuando no estás conforme.</p>
+
+    <p>Aún pides ayuda para salir del baño, pero poco a poco irás haciéndolo sola, ya no te cuesta dormir, apenas te sientes cansada, caes rendida en la cama. A la hora del almuerzo y en la cena aún cuesta hacer que termines toda tu comida, sin embargo, haces tu mejor esfuerzo.</p>
+
+    <p>En casa ya no solamente te acompaña tu primo, Bebé Hugo, quién ya tiene 3 años, sino también Dana, una vecinita de quién te has hecho muy amiga, ella tiene 9; aun así, se llevan muy bien (te tiene paciencia), pero hay alguien más.</p>
+
+    <figure class="photo gallery">
+      <div class="gallery-row">
+        <img src="../img/lm-04.jpg" alt="Luanna con su hermano Mateo, recién nacido, 2022" loading="lazy">
+        <img src="../img/lm-05.jpg" alt="Luanna con su hermano Mateo, recién nacido, 2022" loading="lazy">
+        <img src="../img/lm-06.jpg" alt="Luanna con su hermano Mateo, recién nacido, 2022" loading="lazy">
+      </div>
+    </figure>
+
+    <p>El 18 de enero de este año nació tu hermanito menor, Mateo, quien ahora las acompaña en casa. Él es muy lindo y tranquilo; sin embargo, como todo bebé llora, ¡y llora fuerte!, tú lo cuidas mucho, ayudas a mamá sin que ella te lo pida, vigilando que no se meta nada a la boca o distrayéndolo para que no llore, se nota cuanto lo quieres y eso nos hace muy felices.</p>
+
+    <p>Lamentablemente, ya no estoy en casa todos los días, conseguí un trabajo bastante lejos de casa y solo podré regresar a casa cada 21 días durante cada mes, pero aprovecharé cada minuto al máximo junto a ustedes para que este sacrificio valga la pena, por suerte no será así para siempre, un par de años a lo mucho espero volver a estar a tu lado cada mañana, tarde y noche.</p>
+
+    <p>Mamá Ethel empezó a trabajar hace poco, luego de estar 3 meses cuidando a tu hermanito en casa, así que cuando ella sale cada mañana deja a Mateo con la abu Isa y te acompaña al colegio. A la 1 tu abu te recoge y se queda con ambos hasta que llega mamá Ethel al terminar la tarde. Tu abu me ha dicho que te portas muy bien, y eso me pone muy contento.</p>
+
+    <p>Estos últimos días nos hemos comunicado a diario, por videollamada o enviando mensajes de voz. Me gusta que me cuentes lo que haces durante el día, te imagino y siento como si hubiese estado a tu lado viéndote.</p>
+
+    <div class="pull">Les amo mucho, ustedes son la fuerza principal que me hace seguir adelante.</div>
+
+    <figure class="photo">
+      <img src="../img/lm-07.jpg" alt="Mateo cerca de cumplir dos años, 2024" loading="lazy">
+    </figure>
+
+    <h2 class="entry-date">Lunes 12 de febrero de 2024</h2>
+
+    <p>Mateo, ya estás por cumplir 2 años, no solo aprendiste a caminar muy rápido, sino que ahora corres y haces muchas travesuras en la casa. Te gusta trepar, saltar en la cama y el trampolín que tenemos en el cuarto piso es uno de tus lugares favoritos. Cuando estoy en casa nos gusta ver videos de Jurassic Park, King Kong, Shrek y a veces ponemos música a todo volumen y cantamos y saltamos, o también te cargo para hacerte dormir. Creo que te relaja mucho cuando te canto, porque te duermes muy rápido. También parece que te gusta mucho la música, a veces tocamos mi batería y te encanta, te pones muy contento. Estamos sorprendidos con lo inteligente que eres, sobre todo cuando ayudas a tu abuelita Isa barriendo el patio o en la cocina mientras prepara el almuerzo. Ella siempre tiene cuidado y te presta cosas para que te distraigas hasta que termine de cocinar. Con ella te quedas de lunes a viernes durante casi todo el día, porque mamá trabaja y llega a casa a las 7 de la noche.</p>
+
+    <p>Al inicio llorabas mucho porque la extrañabas mucho, sobre todo porque sigues tomando teta. Aún no quieres hablar, pero con tus gestos y muecas te dejas entender bastante. Aunque, últimamente has estado algo renegón, pero con un besito y un abrazo se te pasa. Lo bonito es que estás todos los días con tu hermana, incluso hay días que con tu primo Yael, aunque a veces peleen por no compartir sus juguetes, se nota cuánto se quieren y se divierten juntos.</p>
+
+    <p>Luanna, este año cumplirás 7 y estamos muy contentos con tu desarrollo, sobre todo en este último año en que aprendiste muchas cosas de las que tú misma te sentiste orgullosa. Te inscribimos en clases de natación y aprendiste a nadar muy rápido, a pesar de que le tenías miedo al agua. Ahora te limpias sola en el baño, bañarte parada en la ducha, ya no es un problema para ti. Dormir de largo en tu cama y al levantarte tenderla, solo nos demuestra lo grande y responsable que te has vuelto.</p>
+
+    <p>También has mejorado mucho en tus dibujos y gracias a tu primo Leo, que te ayuda en época de colegio con tus tareas, mejoraste en las sumas, restas, y ahora estás cada vez mejor en lectura.</p>
+
+    <p>Terminaste el nivel inicial, y en unos meses entras a primaria.</p>
+
+    <p>Lamentablemente, tu amiguita Dana se mudó, y aunque al inicio te pusiste triste, lo aceptaste. No fue tan difícil porque siempre estás acompañada de tu hermanito y tu primo Yael.</p>
+
+    <p>Yo sigo trabajando lejos de casa, pero regreso cada 3 semanas, y me quedo 7 días por completo con ustedes, a veces un poco más.</p>
+
+    <p>Cuando estoy lejos, siempre hacemos videollamadas, tú me cuentas cómo te fue en el día, y siempre me mandas muchos besitos y corazones. Aunque a veces me dices algo triste que me extrañas, yo te calmo diciéndote los días que faltan para volver a vernos.</p>
+
+    <p>Mis pequeños traviesos, quiero que sepan, que los quiero mucho, ustedes son la motivación más grande que tengo para seguir adelante. A pesar de que hay días que la distancia me haga sentir que ya no puedo más y quiero dejarlo todo y regresar a abrazarlos y verlos todos los días, es su sonrisa la que me recuerda que debo ser su sustento y el ejemplo, de que para vivir bien hay que hacer grandes esfuerzos. Además, me reconforta que mamá Ethel los cuida muy bien, ella siempre me cuenta las cosas que hacen y cuando se están divirtiendo, me manda videos o fotos. Al verlos tan felices, siento mucha fuerza para seguir trabajando y cuento cada día que pasa para regresar a apachurrarlos.</p>
+
+    <div class="pull">Los amo mucho y a todos por igual, mamá Ethel, mi gordito Mateito y mi flaquita Luanna.</div>
+
+  </div>
+
+  <div class="book-footer">
+    <p class="view-count" id="view-count"></p>
+    <p><em>2018 – 2024</em></p>
+  </div>
+
+</div>
+
+<script>
+  fetch('https://api.counterapi.dev/v1/bloc-de-notas/luanna-y-mateo/up')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el = document.getElementById('view-count');
+      if (el && d && d.count != null) {
+        el.textContent = d.count === 1 ? '1 lectura' : d.count + ' lecturas';
+      }
+    })
+    .catch(function() {
+      // silently ignore — counter not critical
+    });
+</script>
+
+</body>
+</html>

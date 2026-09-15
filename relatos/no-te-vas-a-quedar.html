@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No te vas a quedar — Bloc de notas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #F2F0ED;
+      --ink:        #1B1919;
+      --ink-soft:   #6A6260;
+      --rule:       #D3CBC5;
+      --accent:     #4C3F5E;
+      --accent-dim: #8B7EAA;
+      --drop-cap:   #3A3050;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:         #100F12;
+        --ink:        #EAE6E2;
+        --ink-soft:   #8A8480;
+        --rule:       #242129;
+        --accent:     #9B88BB;
+        --accent-dim: #6B5E8A;
+        --drop-cap:   #B8A8D4;
+      }
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Lora', Georgia, 'Times New Roman', serif;
+      font-size: 18px;
+      line-height: 1.85;
+      padding-inline: 20px;
+    }
+
+    /* ── Navegación de regreso ── */
+    .back-nav {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 1.4rem 0 0;
+    }
+
+    .back-nav a {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .back-nav a:hover {
+      color: var(--accent);
+    }
+
+    .book {
+      max-width: 660px;
+      margin: 0 auto;
+      padding-block: 60px 80px;
+    }
+
+    /* ── Portada ── */
+    .cover {
+      text-align: center;
+      padding-block: 80px 100px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 80px;
+    }
+
+    .cover-eyebrow {
+      font-family: 'Lora', serif;
+      font-size: 12px;
+      font-style: italic;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 32px;
+      display: block;
+    }
+
+    .cover-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(52px, 11vw, 88px);
+      font-weight: 300;
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+
+    .cover-subtitle {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 21px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--ink-soft);
+      margin-bottom: 56px;
+    }
+
+    .cover-rule {
+      display: block;
+      width: 36px;
+      height: 1px;
+      background: var(--accent-dim);
+      margin: 0 auto;
+    }
+
+    /* ── Texto corrido ── */
+    .narrative p {
+      margin-bottom: 1.5em;
+      font-size: 18px;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .narrative p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Drop cap solo en el primer párrafo de todo el relato */
+    .narrative p.drop-cap::first-letter {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 4.6em;
+      font-weight: 500;
+      line-height: 0.78;
+      color: var(--drop-cap);
+      float: left;
+      margin-right: 0.07em;
+      margin-top: 0.12em;
+      padding-right: 0.02em;
+    }
+
+    /* Separador de escena */
+    .scene-break {
+      text-align: center;
+      color: var(--accent-dim);
+      letter-spacing: 0.5em;
+      margin-block: 52px;
+      font-size: 13px;
+      user-select: none;
+    }
+
+    /* Pull-quote */
+    .pull {
+      border-left: 2px solid var(--accent-dim);
+      padding: 6px 0 6px 24px;
+      margin-block: 44px;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(21px, 3.8vw, 28px);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1.4;
+    }
+
+    /* Pie del libro */
+    .book-footer {
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid var(--rule);
+      text-align: center;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 2.2;
+    }
+
+    .view-count {
+      font-family: 'Lora', Georgia, serif;
+      font-style: normal;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--ink-soft);
+      opacity: 0.6;
+    }
+
+    @media (max-width: 480px) {
+      body { font-size: 16px; }
+      .book { padding-block: 40px 60px; }
+      .cover { padding-block: 56px 72px; }
+      .narrative p { text-align: left; hyphens: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="back-nav">
+  <a href="../index.html">← Bloc de notas</a>
+</nav>
+
+<div class="book">
+
+  <div class="cover">
+    <span class="cover-eyebrow">Una historia sin terminar</span>
+    <h1 class="cover-title">No te vas a quedar</h1>
+    <p class="cover-subtitle">Diego Dávila</p>
+    <span class="cover-rule"></span>
+  </div>
+
+  <div class="narrative">
+
+    <p class="drop-cap">Nací en Lima, en San Juan de Lurigancho, en una casa que mis padres construyeron juntos. Era el último de cuatro hijos, con una diferencia de once, trece y catorce años con mis hermanos mayores. En la práctica, eso significaba que crecí como hijo único. Cuando yo tenía siete u ocho años, ellos ya eran adultos con sus propias vidas. Yo era el niño de la casa. El más chico. El que nadie terminaba de ver del todo.</p>
+
+    <p>El barrio no era rico, pero tampoco voy a decir que era pobre. Era un barrio. Vivíamos en una avenida y al frente había un parque zonal, así que no teníamos vecinos del otro lado, solo en la misma recta. Por suerte había algunos chicos. Me acuerdo mucho de Gary, de su hermano Kevin, de su primo Gonzalo. De Max. De Miguel. Buenos chicos, traviesos como cualquier niño, con quienes me la pasaba bien jugando en la calle.</p>
+
+    <p>Pero cuando se tenían que ir a sus casas, yo lloraba. No me era fácil. Nada me era fácil cuando alguien se iba. Me acuerdo perfectamente: le pedía a mi mamá que los llamara de vuelta, que se quedaran un rato más. A veces salía yo mismo con mis juguetes cargados bajo el brazo, porque pensaba que si los hacía quedarse a jugar más tiempo, no se iban. El juguete como moneda de cambio para que alguien no me abandone. No lo razonaba así, tenía cinco o seis años. Pero lo sentía. Ese miedo ya estaba instalado desde antes de que yo tuviera palabras para nombrarlo. Todos se iban, yo sufría, pero luego volvían otros días. Y sin embargo el miedo tampoco desaparecía. Siempre estuvo.</p>
+
+    <p>Mis hermanos terminaron sus estudios y se fueron también. Mi hermana se fue a vivir a Trujillo. Otro armó su familia y se mudó. El que quedó en casa casi nunca lo veía porque trabajaba todo el día. La familia que me parecía grande cuando era chico fue desapareciendo de a pocos. Y no solo eso: los amigos del barrio también se fueron yendo. Gary y Kevin pasaron por cosas muy duras. Perdieron a su mamá, perdieron a su papá, y a los abuelos que los cuidaban también. En esa situación los metieron al Leoncio Prado, el colegio militarizado. Y con eso se acabó. Ya no podían salir a jugar. Ya no tocaban la puerta. Los demás se fueron mudando o simplemente crecieron y dejaron de querer salir. Creo que esto pasó cuando estaba en cuarto o quinto de primaria. Esa etapa terminó en silencio, sin que nadie lo declarara, sin despedida. El barrio quedó vacío para mí.</p>
+
+    <div class="scene-break">✦ ✦ ✦</div>
+
+    <p>Si hay algo que define mi infancia, además de ese miedo, son los colegios. Conté una vez y llegué a siete. Inicial en el Macarenco. Luego al San Domingo de Guzmán, donde hice desde segundo hasta sexto de primaria. Ese fue el más largo, el que más duró. A partir de ahí empezó todo lo demás.</p>
+
+    <p>Al terminar primaria, mi mamá me dijo que iba a viajar lejos. Le pregunté por qué y me dijo lo que yo no quería escuchar: no había plata, no había quien me cuide en Lima, y mi hermana podía hacerse cargo en Trujillo. Así que me mandaron. Sin preguntarme. Con once o doce años me pusieron a viajar al norte y me dejaron en casa de mi hermana para que hiciera primer año de secundaria en un colegio llamado William Harvey.</p>
+
+    <p>Trujillo fue una soledad completa. Mi hermana estaba en la universidad y llegaba tarde en la noche. Yo me levantaba solo, me compraba el desayuno solo, me iba al colegio solo, volvía solo. Mi mejor amigo fue Ronnie, un chico con discapacidad para caminar, tranquilo, buena persona. También estaba Enzo, un buen pata. Y estaba Yancen con su hermana Tania, los dueños del local donde se podían alquilar máquinas de PlayStation para jugar, donde me escapaba a pasar la tarde. Pero yo todos los días le llamaba a mi mamá llorando. Que la extrañaba. Que me sentía solo. Que no aguantaba más. Al medio año ella tomó la decisión de traerme de regreso. Las cosas no estaban funcionando.</p>
+
+    <p>Como ya estábamos a mitad de año y yo necesitaba colegio urgente, pidieron el favor a un familiar que trabajaba en uno llamado Los Peregrinos, en Lima. Era cristiano, rezaban, hablaban mucho de Dios, había una auxiliar que castigaba a todo el mundo menos a mí —decían que era porque tenía el mismo apellido que yo, Dávila, y que por eso me tenía consideración, aunque yo era bastante travieso también. Ese año terminé a las justas. Me acuerdo que el 11 de septiembre de 2001, las Torres Gemelas, lo vi estando ahí. En Los Peregrinos. Esa imagen se quedó grabada.</p>
+
+    <p>Al año siguiente me cambiaron al Santiago Antúnez de Mayolo para segundo de secundaria. Para ese entonces mi mamá ya trabajaba fuera de casa, y mi papá había perdido el trabajo. La economía cayó tanto que mi mamá tuvo que tomar un empleo de cama adentro: solo venía los domingos un rato, y el lunes en la mañanita ya se había ido. La veía casi nada. Solo podíamos hablar por teléfono, consumiendo el saldo de a pocos. Así que me quedé con mi papá. Y mi papá siempre fue una persona muy tosca. Me pegaba, me humillaba, me criticaba todo, nunca me validó nada. Nunca me revisó los cuadernos. Nunca me dijo te quiero, hasta hoy.</p>
+
+    <p>El Santiago Antúnez era semi-internado: entraba a las ocho y salía a las seis y media de la tarde, comía ahí. Le convenció a mi mamá porque así yo no tenía dónde escaparme. Pero siempre hay manera. Aprendí a hacerme tarde a propósito para que la movilidad que me recogía se cansara de esperarme y se fuera. Y cuando la movilidad se iba, mi papá me decía: toma tu micro, vete. ¿Tú crees que lo hacía? No. Me iba a la cabina de internet. Estaban apareciendo en esa época. Jugaba Counter-Strike, Starcraft, esas cosas. Le robaba la plata a mi papá para pagar las horas. Le robaba también a mi hermano, que ganaba en dólares, y con esos dólares me alcanzaba de sobra: la hora costaba un sol, y con cinco soles tenía cinco horas para aguantar hasta que terminaran las clases y yo pudiera volver a casa como si nada.</p>
+
+    <p>Cuarto de secundaria: un colegio más cerca, baratísimo, casi informal. Ahí sí me desbanqué del todo. Ese año debo haber ido a clase veinte o treinta veces de todo el año. El resto, cabina. Sin comer nada, aguantando el hambre, con tal de tener mis cinco soles para las horas. Le robaba también a mis hermanos. Cuando descubrieron que había faltado casi todo el año, nadie lo podía creer. Repetí el año. El colegio anterior ya no me quería recibir como repitente. Buscaron y encontraron uno que se llama Micaela Bastidas, que aceptó recibirme diciéndoles a mis padres: nosotros nos encargamos de su hijo. Siete colegios en total. Siete comienzos. Siete veces siendo el nuevo, el de afuera, el que tiene que ganarse el espacio desde cero. Mi cabeza nunca estuvo en los cursos. Estaba en cómo sobrevivir emocionalmente, en cómo hacerme un lugar entre personas que no me conocían, en cómo no llorar por lo que había dejado atrás.</p>
+
+    <div class="scene-break">✦ ✦ ✦</div>
+
+    <p>En el Micaela Bastidas algo cambió un poco. Los profesores me prestaban atención, yo dejaba de faltar con tanta frecuencia, iba mejorando. Y ahí, con unos quince años, me enamoré por primera vez. Se llamaba Angie. Me gustaba muchísimo. Un día me tiró onda y yo no lo podía creer, porque nunca me había sentido guapo ni merecedor de que alguien se fijara en mí. La llevé a mi casa, tuvimos sexo, yo todo inexperto, y me enamoré. Me sentí el mejor del mundo. Tenía una chica tan linda conmigo, estaba orgulloso, feliz.</p>
+
+    <p>Lo mío fue un jugueteo para ella. Un día me avisaron que tenía enamorado. La fui a buscar a su casa y me lo dijo de frente: estoy con alguien, no debes venir acá. Solo tuvimos algo y ya. Básicamente me usaron. Mi corazón se rompió en millones de pedazos. No quise ir al colegio más. Comencé a faltar otra vez. Dolió muchísimo. Porque yo ya era alguien con heridas de abandono, y encima esto.</p>
+
+    <p>También iba mucho a la casa de mi primo Edu, que vivía más o menos cerca. Me distraía con sus amigos, había un local de máquinas donde jugábamos. Pero nunca me sentí bienvenido ahí. Era el invitado permanente, el que aceptaban porque en fin, era primo de Edu. Con el tiempo comenzaron a perderse cosas en esa casa y me echaron la culpa. Me fui. No volví más. Una nueva gente menos en mi vida, otra vez.</p>
+
+    <p>Quinto de secundaria trajo otra rareza: éramos muy pocos —dos chicas y yo— y nos juntaron con el salón de cuarto. El problema era que Angie era de cuarto. Así que me tocó estar en el mismo salón que ella todo el año. No tenía ganas de verla. No tenía ganas de ir al colegio si ella iba a estar ahí. Pero apareció Melisa. Rubia, ojos pardos, hermosa. Y me la mandaron a mí. No lo podía creer, yo que siempre me consideré un feo. Cuando me confirmaron que sí le gustaba, hablé con ella, nos hicimos novios. La visitaba en su casa, su papá era muy celoso y salía de rato en rato a mirar, así que en toda la relación solo le di dos besos. Me terminó al poco tiempo: no avanzamos, no hay siguiente nivel. Y yo tampoco estaba muy enamorado, así que no dolió tanto. Mi corazón estaba todavía ocupado con Angie y con todo lo que ya cargaba.</p>
+
+    <p>En esa época empezó a escucharse mucho el estilo emo. Como a mí siempre me había gustado el rock —por mis hermanos mayores— dije: esta es una mezcla entre punk y música oscura. ¿Por qué no? Me quedé con esa moda al terminar el colegio y me sirvió, la verdad. La moda exigía cabello largo, y ese cabello largo me tapaba la cara. Y yo no quería que nadie viera esa cara: era la cara de un chico dolido, con baja autoestima, que se había sentido abandonado por todo el mundo. Vestirme de negro me sirvió. Taparme la cara me sirvió. Generar otra personalidad me sirvió, porque quien yo había sido hasta ese entonces no había funcionado: todos se habían ido de todas formas. ¿Por qué no volverme otra persona? En las cabinas de internet empezaron a hablar de mí. Que ya está Diego, el emo que se ve bien. Que sabe de música, que sabe de videojuegos. Me respetaron. Era la primera vez en mucho tiempo que sentía que pertenecía a algo.</p>
+
+    <div class="scene-break">✦ ✦ ✦</div>
+
+    <p>Ya había terminado el colegio y no tenía ninguna intención de estudiar nada. Mi mamá me metió a un instituto de computación e informática, Computrónic, al que fui pocas clases. Estaba en una etapa de depresión incipiente, de emo, de abandono acumulado. Y en esa etapa, en las cabinas de internet, apareció una red social llamada Hi5.</p>
+
+    <p>En Hi5 conocí a Daniela. También le gusté por mis fotos emo. Quedamos en vernos un día en las galerías Brasil, en la avenida Brasil, donde vendían ropa, CDs, música rock. Cuando la vi, me gustó. Yo le gusté. Fuimos a mi casa, fue muy cariñosa, me quería, me admiraba. Ella también tenía el mismo estilo. Éramos una pareja hermosísima, o al menos eso sentía yo. Por fin alguien me correspondía. Por fin alguien me quería. Por fin alguien se veía como yo. Íbamos a estar cuatro años juntos.</p>
+
+    <p>Su papá, el señor John, trabajaba en el Lote 88, donde se extrae gas de Camisea. Muy buena persona. Lo llegué a conocer, me invitó a almorzar, se interesó en quién era yo. Y yo por dentro me saboteaba, porque decía: yo no merezco esto, yo no merezco que me reciban así. Era una cólera contenida por dentro, un ¿por qué ahora que todo me va bien siento que no lo merezco?</p>
+
+    <p>En esa época también metí a un instituto para estudiar Ingeniería de Sistemas. Pagaron la pre. Nunca fui a una sola clase. Pedía el dinero para el pasaje y la comida, y con eso pagaba mi cabina. Cuando se dieron cuenta de que había faltado todo, los defraudé otra vez. En Hi5, mientras tanto, con un poco de código se podía editar el perfil y hacerlo llamativo. Yo era una de las estrellas en ese estilo. Muchas chicas me conocían, me hacían comentarios en las fotos: qué guapo, qué lindo estás. Me invitaban a salir. Yo no salía —tenía a Daniela— pero el solo hecho de tener toda esa atención era una sensación que nunca había conocido. ¿Quién era yo para tener tanto éxito con las mujeres? Nunca lo había sabido. Daniela aguantaba todo eso.</p>
+
+    <p>Me dieron un ultimátum: o estudias o trabajas. Elegí estudiar diseño gráfico en ISIL, que iba más con lo que me gustaba. Primer ciclo, segundo ciclo, Daniela me ayudaba con algunas tareas. Mientras estábamos en esa etapa, la embaracé. No fue una vez: fueron dos, y en las dos perdimos al bebé. Abortamos. Dolió mucho, nos quebró como pareja, nos debilitó. Y de ahí viene mi estupidez: empecé a hacerle caso a las chicas que me halagaban. Saqué los pies del plato un par de veces. Me acosté con personas que no debía, incluso con la novia de por medio. Ella no se iba. Lloraba y se quedaba porque no quería perderme. Y yo odiaba cuando lloraba, porque tenía una imagen de mi mamá llorando toda su vida que nunca soporté. Además me daba cólera que no se fuera, porque yo quería hacer mi vida con otras personas, quería experimentar, quería gozar de esa fama de sentirme guapo e importante. Y me dejé llevar, consciente de mis acciones, infiel varias veces, hasta que una vez ya no aguantó más.</p>
+
+    <p>Entre una de esas infidelidades apareció Ethelmaría. La había conocido también por redes, junto a todo ese grupo de chicas que me seguían. Pero con ella sentí algo distinto. Cuando estuve con ella, me enamoré. Me cautivó su olor, su cuerpo, su delgadez, su piel, su tamaño, cómo me miraba, cómo me admiraba. Me quedé embobado. Pero Ethelmaría se fue. Se fue a vivir a Argentina. Y yo dije: no voy a dejar a alguien seguro por alguien que no sé cuándo va a volver. Así que mientras estuvo en Argentina, yo seguí de las mías. Salí con varias chicas por temporadas, intentando llenar un vacío que tampoco sabía cómo nombrar.</p>
+
+    <p>Daniela, finalmente, me dijo lo que yo llevaba tiempo mereciendo escuchar. Con lágrimas en sus ojos grandes: "Diego, he visto que estás saliendo con otra chica. Aquí acaba todo. No quiero aguantar más." Y se fue. Pensé que era una más de las tantas veces que terminábamos y ella regresaba. No le di importancia. Pero esta vez no regresó. Y cuando me di cuenta de que era en serio, le rogué, le insistí. Y demostró su desprecio total. Abandonado, pero esta vez por propia culpa. Yo lo busqué. No lo niego.</p>
+
+    <div class="pull">"Era un mierda, un patán, un hombre asqueroso. Y lo sabía. Lo supe siempre."</div>
+
+    <div class="scene-break">✦ ✦ ✦</div>
+
+    <p>Cayó Daniela. Cayó el instituto: había repetido tres veces el mismo curso, solo uno, y los demás muy bien, pero ese uno se convirtió en razón para no volver nunca más. Un día estaba en clase y dije: no vuelvo. Y no volví. Se lo dije a mi mamá: no voy a estudiar más esa carrera. Y entré en depresión. Una depresión medicada. Me llevaron a psicólogos, a psiquiatras, pasé por muchos. Hasta me llevaron a un hipnotista, el Dr. Hernani, que intentó corregir mi adicción a las cabinas de internet con una pseudo-hipnosis. Algo cambió ahí, lo debo reconocer, pero no lo suficiente. Me llevaron al hospital Emilio Valdizán, que es psiquiátrico. Había pacientes internados con esquizofrenia, con demencia severa. Y yo era un paciente más, siempre acompañado de mi mamá, que llegaba preocupada, que recién en ese momento sentía que tenía que estar a mi lado. Eso me adolece todavía. Que fuera en el momento más crítico cuando reapareció.</p>
+
+    <p>La depresión no me dejaba dormir, no me dejaba concentrarme, no me dejaba avanzar. Lloraba cuando la mosca se moría. Lloraba imaginando escenarios donde todos se morían y me abandonaban. Me sentía culpable de todo lo mal que había hecho. Y no solo lloraba: había ganas de matarme. Me acuerdo que una vez mezclé veneno de ratas con Caño de refresco instantáneo en una jarra plástica. Lo mezclé y estuve a nada de tomarlo. En el fondo creo que no me iba a atrever, quería probarme a mí mismo hasta dónde había llegado. Pero estuve ahí. No lo tomé. Me tiré a llorar, boté todo el veneno. Creo que nadie nunca lo supo.</p>
+
+    <p>Me metieron también a una terapia grupal que se llamaba Los Decenios. Imposición de manos, corte de vínculos de vidas pasadas, cosas así. Costó más de tres mil soles, que para nuestra economía era imposible de juntar. Pero sentí que me ayudó a salir del hueco. Porque sí era depresión. Lo que nadie entendía era que no era un psicólogo ni una hipnosis ni una medicina lo que me iba a curar: era el arrepentimiento de mi mamá, las ganas de su parte de ayudarme a mejorar, y las ganas que yo tenía de salir adelante. Cansado de tanto sufrimiento.</p>
+
+    <p>Un día ella extendió el brazo. "Diego, ya es momento de que te levantes." Y yo también extendí el mío, porque quería sentirme mejor. Y juntos, de a pocos, empezamos a salir del hueco. Le dije: "Mamá, dame una oportunidad, quiero estudiar." Y ella me dijo: "Esta es la última, Diego. Si me fallas, te encargas de tu vida." Acepté.</p>
+
+    <div class="scene-break">✦ ✦ ✦</div>
+
+    <p>Pedí estudiar Comunicación Audiovisual en el instituto Toulouse Lautrec. La condición era que trabajara, que pagara mis pasajes por lo menos. Acepté. Me metí a un call center, una amiga me ayudó a entrar. Casi ochocientos soles por mes. Y al mismo tiempo estudiaba. El primer y segundo ciclo fueron terribles en términos de tiempo: no había conciertos, no había chicas, no había videojuegos. Todo eso quedaba atrás mientras yo, por primera vez en mucho tiempo, intentaba convertirme en una persona funcional. No tenía novia. Por ahí alguna chica del mundo gótico con la que me veía, pero nada oficial.</p>
+
+    <p>Y de repente llegó la noticia: Ethelmaría volvía a Lima. La morena bonita de la que me había enamorado, la chica que se había ido a Argentina. Volvía para quedarse, para retomar sus estudios en la UTP. La noticia me cayó perfecta. Yo estaba retomando mi vida, sintiéndome bien con lo que hacía, demostrándoles a todos que sí podía. Le dije a Ethelmaría que no tenía novia y le pedí para estar. Virtualmente aceptó, pero quería que se lo dijera en persona.</p>
+
+    <p>El día que llegó fui a buscarla. Yo ya había dejado un poco el estilo emo: usaba mi cabello suelto y ondulado, una camisa grunge, jeans pitillos, botas altas negras tipo vaquero. La recogí de su casa y nos fuimos al malecón de La Comar, en Miraflores. Le dije que quería que fuera mi novia y ella aceptó. Nos besamos. Todavía hablaba con el dejo argentino, muy gracioso. Me moría de frío en el ArcoMar esa noche, pero no me importó en absoluto. Estaba con ella, la abrazaba, y muy tarde la llevé de regreso a su casa.</p>
+
+    <p>Comenzamos a vernos seguido. Ella me iba a recoger del instituto, del trabajo. Se quedaba a dormir los fines de semana. Cuando le faltaban solo dos ciclos para terminar la universidad, ya estaba trabajando también. Saliendo del trabajo venía a verme. Tuvimos mucho sexo en esa temporada, todos los días, muchos besos. Nos grabábamos también, hacíamos videollamadas, y ella se mostraba a través de la cámara. Le gustaba provocarme. A mí me encantaba que lo hiciera. No sentíamos la distancia. Yo sentía que esta vez lo podía hacer bien. Siempre la había querido a ella, y ahora podía hacerlo bien.</p>
+
+    <div class="scene-break">✦ ✦ ✦</div>
+
+    <p>Los celos empezaron pronto. En realidad, siempre estuvieron: nunca se habían ido. Ethelmaría era desde que la conocí una chica muy amigable, de esas que cuando te hablan te sonríen con los ojos. Esa mirada chinita me parecía lo más bonito del mundo. Y yo quería esa sonrisa para mí nada más. No quería compartirla con nadie. Tenía miedo de que se fuera también, de que alguien mejor que yo le pareciera un mejor candidato, de que se diera cuenta de que yo no valía tanto.</p>
+
+    <p>Comencé a hacerle problemas cuando un chico le comentaba en una foto. Una vez me robé su USB y en mi casa lo revisé: encontré fotos de su expareja, escritos como si fueran un diario. Me volví loco. Le hice daño en su privacidad. Y ella copió esa misma actitud: comenzó a celarme también, a escribirle a chicas diciéndoles que no me escribieran. Me hizo perder algunas amistades buenas, no solo gente que me coqueteaba sino gente chévere con la que tenía una amistad real. Yo hice lo mismo con ella: le fui borrando amigos. Así empezamos a construir nuestra relación en círculos cada vez más cerrados.</p>
+
+    <p>Los pocos que le quedaban como amigos incluían a uno con quien un día descubrí que hablaban de sexo en la noche. No como deseándose, sino morboseando juntos, estando ella conmigo. Yo no digo que fuera un santo en ese sentido, también tuve conversaciones pícaras que no debieron existir. Pero eso debilitó la confianza de una forma que tardó mucho en repararse. Hubo también una compañera de trabajo de Ethelmaría que me escribió para decirme que se estaba subiendo al auto de un chico bastante mujeriego, y que no había sido una vez. Ethelmaría al principio lo negó, después lo admitió: decía que él solo la jalaba a su paradero, que a veces iban otros compañeros también. Pero el solo hecho de imaginarla subiendo a ese auto me generó una insatisfacción, unas dudas, un malestar que no sé muy bien cómo superamos. Supongo que no lo hablamos más y quedó enterrado.</p>
+
+    <p>Le decía que no me gustaba que fuera a las fiestas de su trabajo. No me gustaba que saliera a discotecas con sus amigos. No me gustaba que subiera fotos a Instagram porque sentía que perdía la exclusividad de verla, que quedaba vulnerable. Fui diciéndolo, y fue calando. Hasta que en 2016 los celos se volvieron insoportables y terminamos. Casi un año separados. Lloré mucho, me deprimí de nuevo, esta vez sin medicación. Dejé el instituto otra vez —me faltaba solo un curso para terminar, y ese curso por haberlo dejado se multiplicó en dos ciclos porque cambiaron la malla curricular. No lo volví a intentar.</p>
+
+    <p>Comencé a salir a tomar muy seguido para olvidar. Salí con una chica del mundo gótico que le gustaba yo aunque a mí no me gustaba ella. Lo supe desde el principio. Cuando me emborrachaba, mis amigos me decían que yo, estando con ella, hablaba de mi ex. O sea de Ethelmaría. Borracho, hablando de Ethelmaría con la otra chica. Ese nivel. Tiempo después me enteré de que Ethelmaría, en esa etapa de separación, había estado con una chica en una relación lésbica. Y luego, al terminar con ella, estuvo con un periodista que la llevó a su casa, la presentó a la familia, la invitó a comer, fue un caballero en todo. Yo ya había perdido la esperanza. Esto era caso perdido.</p>
+
+    <p>Pero el periodista tenía novia todo el tiempo y la estaba engañando a Ethelmaría. Se burló de ella. Se burló de su familia. Y Ethelmaría quedó hecha trizas. Ese fue mi momento. Le ofrecí consolarla, abrazarla, le dije que todavía la quería y que quería que volviera. Un día me invitó a su casa. Yo venía de tomar y fui de todas formas, no iba a perder ese momento. Nos besamos, hicimos el amor. Casi me para el corazón de verdad: entre estar ebrio, entre la emoción, entre volver a sentirla en mis brazos. Casi muero de eso. Nos reímos un poco de la situación después. Le dije que quería volver. Ella no estaba segura. Supe esperar.</p>
+
+    <p>Unas semanas después, el día de mi cumpleaños, fue a mi casa. Y quedamos como que íbamos a continuar.</p>
+
+    <div class="scene-break">✦ ✦ ✦</div>
+
+    <p>Volvimos en agosto o septiembre de 2016. Tres meses después Ethelmaría me dijo: "Diego, no me ha venido la regla. Voy al ginecólogo." Y me escribió después: "Estoy embarazada. No sé qué hacer." Se puso a llorar. Yo tampoco sabía qué hacer. Era joven, estaba terminando la carrera —o eso creía—, y ahora esto. Le dije: tranquila, cuéntaselo a tu mamá, yo le cuento a la mía, que nos digan qué hacer. Mi mamá me dijo: "Diego, termina tu carrera. Te vamos a prestar dinero para construir tu departamento aquí en la casa." Se habló con un primo, construimos con urgencia, yo empecé a trabajar antes de terminar la carrera, que ya no iba a terminar porque el curso multiplicado lo había hecho imposible.</p>
+
+    <p>Ethelmaría se mudó. Construimos algo juntos en ese departamento. Y el 26 de junio de 2017 nació Luana. Fue muy lindo. El problema era quién la cuidaba. Mi mamá todavía trabajaba. La mamá de Ethelmaría no quería hacerse cargo. Entonces dije yo: me hago cargo de mi bebé. Y así fue: me quedé casi más de un año cuidándola. Yo le cambiaba el pañal, yo la vestía, yo la bañaba, yo le daba de comer. Ethelmaría me dejaba las leches preparadas antes de salir al trabajo: esta leche toca ahora, esta toca después. Y fui aprendiendo.</p>
+
+    <p>Fue lindo y fue agobiante. Fue duro. Y también fue el primer momento en que la conocí de verdad a Ethelmaría. La conocí conviviendo. Descubrí cosas que no sabía: que lloraba mucho, que evitaba las conversaciones difíciles, que no preguntaba cómo estás, que cuando quería hablar las palabras le fallaban. Que olvidaba las cosas constantemente. Que ponía el papel del baño al revés. Que no jalaba la palanca. Cosas tontísimas y absurdas que a mí me hacían daño igual, y que se lo decía pero no de la forma más bonita, porque mi forma de hablar siempre ha sido tosca. Eso también le generaba trauma a ella. No habíamos tenido casi convivencia sin ser padres. Desde que vivimos juntos, ya éramos familia.</p>
+
+    <p>Un día mi mamá me dijo que podía ayudar con la bebé si yo trabajaba. Así que la busqué. Me recomendaron y entré. El trabajo me mandaba a provincia. A veces tres semanas afuera, a veces dos. Y adivina adónde: al Lote 88, donde se extrae gas natural. El mismo lugar donde trabajaba el señor John, el papá de Daniela. Me lo encontré ahí. No me reconoció, mi cuerpo había cambiado, me veía más mayor. Menos mal. El trabajo era duro, el salario era poco, las ausencias eran largas. Luana crecía y yo no estaba. Ethelmaría trabajaba —siempre trabajó, nunca dejó de aportar aunque no ganara mucho. Pero yo quería mi hogar. Desde siempre lo quise. Cuando salía de fiesta con mis amigos les decía: algo me dice que esto es solo una etapa y que yo quiero formarme un hogar. Y mira. Con todo el caos que traíamos encima, lo estábamos formando. Seguí nueve años con esa empresa.</p>
+
+    <div class="scene-break">✦ ✦ ✦</div>
+
+    <p>Llegó la pandemia y nos encontró a los cuatro en casa. Terminamos de ver Naruto completo juntos, vimos películas y series, con Luanita jugando por ahí. Fue un tiempo extraño pero también nuestro, de los pocos que tuvimos solo para nosotros. Y en cuarentena, Ethelmaría quedó embarazada. Luana lo había pedido: quería hermanito, no hermanita, hermanito. Y no es que nosotros le hiciéramos caso adrede, simplemente nunca nos cuidamos y se dio. El 18 de febrero nació Mateo. Muy pequeño, muy lindo. Nos alegró la vida, igual que Luana.</p>
+
+    <p>Y fue también el momento en que me ofrecieron un trabajo en Chiclayo. Permanente. Veintitrés días al mes en Chiclayo, siete días en Lima. Mateo tenía apenas un mes. Acepté con el dolor del alma, le consulté a Ethelmaría, ella me dijo que podía sola, que los fines de semana estaría yo, que además estaba mi mamá para ayudar. Y así fue. A Mateo lo cuidó Ethelmaría. Lo cuidó mi mamá. Yo lo cuidé siete días al mes. No fue como con Luana, que la conocí de cerca desde el primer día. Con Mateo hay una distancia que a veces duele, que a veces siento que no sé cómo llenar.</p>
+
+    <p>Yo me hacía cargo de los gastos: colegio, movilidad, internet, cable, teléfono. Ethelmaría se encargaba de la comida, las loncheras, los útiles. Así dividimos las responsabilidades. Así funcionamos. Y los reclamos que fui haciendo durante años, ese con quién estás, a dónde vas, a qué hora vuelves, quién es ese chico —siempre el mismo miedo de siempre— dejaron de ser motivo de una discusión de noche y se fueron convirtiendo en el problema principal. Ahora comenzaban a molestarle más. Ahora ya no los aguantaba.</p>
+
+    <div class="scene-break">✦ ✦ ✦</div>
+
+    <p>Septiembre de 2026. Luana tiene nueve años. Mateo tiene cuatro. Ethelmaría y yo llevamos conviviendo casi tanto tiempo como ella tiene Luana. Y terminamos. Terminamos por lo de siempre: le dije que no me gusta que suba fotos a Instagram. Que no me gusta que varios la estén viendo. Que no me gusta que se exponga. Que yo le doy exclusividad y espero lo mismo. Ella me dijo que no, que ella es así y quiere seguir siendo así. Yo le dije que entonces no quiero estar con una persona así. Y se acabó. Sin marcha atrás.</p>
+
+    <p>Hemos descubierto que ella tiene apego evitativo. Que yo tengo apego ansioso. Que cuando ella quiere alejarse para respirar, yo interpreto que me va a abandonar y busco hablar más, la saturo, la canso, y eso le confirma que necesita más espacio. Y ella, agotada, se aleja más. El círculo perfecto. Lloro. Tengo miedo. No sé qué va a pasar con mis hijos si nos separamos del todo.</p>
+
+    <p>Pero hay algo que sí sé. Algo que entendí hace poco, que todavía no termino de entender del todo, que me está cayendo de a pocos como agua fría.</p>
+
+    <p>Ese niño que lloraba cuando Gary y Kevin se tenían que ir a sus casas. Que cargaba sus juguetes bajo el brazo para que se quedaran más tiempo. Que le pedía a su mamá que los llamara de vuelta. Ese niño que vio a sus hermanos irse uno por uno, que lo mandaron a Trujillo y lloraba todos los días por teléfono, que cambió de colegio siete veces y perdió amigos cada vez, que su mamá no estaba porque tenía que trabajar y su papá estaba pero era un golpe, una humillación, una crítica. Ese niño nunca dejó de existir.</p>
+
+    <p>Ese niño se convirtió en el adolescente que no podía soportar que Daniela llorara. En el chico que le fue infiel varias veces a alguien que lo quería, como si quisiera irse él antes de que lo dejaran. En el hombre que le borra amigos a Ethelmaría, que le pide que no suba fotos, que quiere la exclusividad completa de su sonrisa, porque en el fondo tiene terror de que alguien mejor llegue y se la lleve.</p>
+
+    <div class="pull">"Desde siempre esperé que se fueran. Y me las arreglé para que siempre sucediera."</div>
+
+    <p>Ahora puedo verlo. Puedo nombrarlo. Ethelmaría tiene sus propias heridas, su propio apego, sus propias razones para alejarse. Mis hijos tienen nueve y cuatro años y merecen padres que estén bien. Y yo, después de todo este tiempo, acabo de descubrir que el hilo que conecta al niño que era con el hombre que soy pasa por el mismo nudo: el miedo a que se vayan. El miedo a que todos se vayan.</p>
+
+    <p>Y todavía no sé qué hacer con eso.</p>
+
+    <p>La historia sigue.</p>
+
+  </div>
+
+  <div class="book-footer">
+    <p class="view-count" id="view-count"></p>
+    <p><em>Lima, septiembre de 2026</em></p>
+  </div>
+
+</div>
+
+<script>
+  fetch('https://api.counterapi.dev/v1/bloc-de-notas/todos-se-fueron/up')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el = document.getElementById('view-count');
+      if (el && d && d.count != null) {
+        el.textContent = d.count === 1 ? '1 lectura' : d.count + ' lecturas';
+      }
+    })
+    .catch(function() {
+      // silently ignore — counter not critical
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Originales de trabajo (pesan 14 MB y no hacen falta en el sitio)
+_fuentes/
+
+# Copias de seguridad del desarrollo
+checkpoints/
+
+# Configuración local del servidor de pruebas
+.claude/
+
+# Notas personales y material de origen: se quedan en tu equipo
+History.txt
+PROYECTO.txt
+*.docx
+
+# Basura del sistema
+Thumbs.db
+desktop.ini
+.DS_Store
