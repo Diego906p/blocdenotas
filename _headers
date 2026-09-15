@@ -7,7 +7,7 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=()
 
 # Las imágenes no cambian: que el navegador las guarde un año
-/img/*
+/*/img/*
   Cache-Control: public, max-age=31536000, immutable
 
 # El HTML sí cambia: que se revise siempre

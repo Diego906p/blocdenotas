@@ -10,12 +10,17 @@ JavaScript en un solo archivo.
 
 ## Estructura
 
+El sitio vive dentro de una carpeta con nombre aleatorio: así la dirección no
+se puede adivinar y solo entra quien tenga el enlace. La raíz del dominio no
+muestra nada.
+
 ```
-index.html              El sitio entero: librero, libro y relatos incrustados
-relatos/                Cada relato, también como página suelta
-  no-te-vas-a-quedar.html
-  luanna-y-mateo.html
-img/
+<carpeta-secreta>/
+  index.html            El sitio entero: librero, libro y relatos incrustados
+  relatos/              Cada relato, también como página suelta
+    no-te-vas-a-quedar.html
+    luanna-y-mateo.html
+  img/
   bg-escritorio_luz.jpg     fondo de día
   bg-escritorio.jpg         fondo de atardecer (paso intermedio)
   bg-escritorio_noche.jpg   fondo de noche
@@ -23,8 +28,14 @@ img/
   hoja-izq.png              hoja que gira, lado izquierdo
   hoja-der.png              hoja que gira, lado derecho
   lomos/                    lomo de cada libro del estante
-  lm-01.jpg … lm-07.jpg     fotografías del relato «Luanna y Mateo»
+    lm-01.jpg … lm-07.jpg     fotografías del relato «Luanna y Mateo»
+
+index.html · 404.html   páginas mudas para cualquier ruta que no sea la buena
+robots.txt · _headers   bloqueo de buscadores y cabeceras del despliegue
 ```
+
+La dirección completa está en `.ruta-secreta.txt`, que no se sube al
+repositorio.
 
 ## Cómo verlo
 
@@ -88,5 +99,5 @@ aún se está escribiendo.
 
 ## Publicar
 
-GitHub Pages sirve la raíz del repositorio tal cual. En **Settings → Pages**,
-rama `main` y carpeta `/root`.
+Cloudflare Pages conectado a este repositorio: cada `git push` despliega solo.
+Sin comando de compilación y con la raíz como directorio de salida.
