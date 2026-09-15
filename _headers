@@ -1,0 +1,15 @@
+# Cabeceras que aplica Cloudflare Pages
+
+/*
+  X-Robots-Tag: noindex, nofollow, noarchive, noimageindex
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# Las imágenes no cambian: que el navegador las guarde un año
+/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# El HTML sí cambia: que se revise siempre
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
