@@ -149,6 +149,19 @@ input, textarea, select { font-family: inherit; }
 .book-spine.is-pending { filter: brightness(.6) saturate(.75) drop-shadow(3px 6px 10px rgba(0,0,0,.7)); }
 .book-spine.is-pending:hover { filter: brightness(.92) saturate(.95) drop-shadow(9px 14px 20px rgba(0,0,0,.75)); }
 
+/* ── La escena se monta por partes: primero el cuarto, después la barra,
+      y al final los libros apareciendo uno tras otro ── */
+@keyframes entrarFondo   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes entrarBarra   { from { opacity: 0; transform: translateX(-14px); }
+                           to   { opacity: 1; transform: none; } }
+@keyframes entrarLomo    { from { opacity: 0; transform: translateY(14px); }
+                           to   { opacity: 1; transform: none; } }
+
+#view-public.entrando .scene-bg { animation: entrarFondo .9s ease both; }
+#view-public.entrando .sidebar  { animation: entrarBarra .8s cubic-bezier(.22,1,.36,1) .6s both; }
+#view-public.entrando .book-spine { animation: entrarLomo .55s cubic-bezier(.22,1,.36,1) both; }
+#view-public.entrando .scene-hint { opacity: 0; }
+
 /* ── Barra lateral sobre la escena ────────────── */
 .sidebar {
   position: fixed;
@@ -1249,9 +1262,12 @@ function spineGradient(category, i) {
   return `linear-gradient(95deg, ${c[0]} 0%, ${c[1]} 62%, ${c[0]} 100%)`;
 }
 
+let orden = 0;   // para que los lomos entren uno detrás de otro
+
 function renderShelf() {
   const wrap = document.getElementById('shelf-wrap');
   wrap.innerHTML = '';
+  orden = 0;
 
   const fila = document.createElement('div');
   fila.className = 'shelf-row';
@@ -1267,6 +1283,7 @@ function renderShelf() {
       ? `${story.title} — en preparación`
       : `Abrir «${story.title}»`);
     b.innerHTML = `<img src="${story.spine}" alt="${story.title}" draggable="false" style="aspect-ratio:${story.ratio}">`;
+    b.style.animationDelay = (1.35 + orden++ * 0.05) + 's';
     b.addEventListener('click', () => tomarLibro(story, b));
     fila.appendChild(b);
   });
@@ -1292,6 +1309,7 @@ function llenarFila(fila, relleno) {
     b.tabIndex = -1;
     b.setAttribute('aria-hidden', 'true');
     b.style.height = EMPTY_HEIGHTS[i % EMPTY_HEIGHTS.length] + '%';
+    b.style.animationDelay = (1.35 + orden++ * 0.05) + 's';
     b.innerHTML = `<img src="${relleno.src}" alt="" draggable="false" style="aspect-ratio:${relleno.ratio}">`;
     fila.appendChild(b);
     if (libre() < 0) { b.remove(); break; }
@@ -1528,6 +1546,7 @@ function turnPage(dir) {
   if (turning || destino < 0 || destino >= bookPages.length) return;
   turning = true;
   btnPrev.disabled = btnNext.disabled = true;
+  sonarHoja();
 
   const iFrente = dir === 1 ? bookSpread + 1 : destino + 1;
   const iDorso  = dir === 1 ? destino        : bookSpread;
@@ -1823,6 +1842,60 @@ window.addEventListener('resize', () => {
 });
 
 // ══════════════════════════════════════════════════════════
+//  EL SONIDO DE LA HOJA
+//  Sintetizado en el navegador: ruido filtrado con un barrido de
+//  frecuencia, que es lo que suena cuando el papel roza. Sin archivos.
+// ══════════════════════════════════════════════════════════
+let audio = null;
+
+function contextoAudio() {
+  if (audio) return audio;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return null;
+  audio = new AC();
+  return audio;
+}
+
+function sonarHoja() {
+  const ctx = contextoAudio();
+  if (!ctx) return;
+  if (ctx.state === 'suspended') ctx.resume();
+
+  const t = ctx.currentTime;
+  const dur = 0.38;
+
+  // ruido blanco: la materia prima del roce
+  const buffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
+  const datos = buffer.getChannelData(0);
+  for (let i = 0; i < datos.length; i++) datos[i] = Math.random() * 2 - 1;
+
+  const fuente = ctx.createBufferSource();
+  fuente.buffer = buffer;
+
+  // el barrido de agudos es lo que da la sensación de hoja que pasa
+  const banda = ctx.createBiquadFilter();
+  banda.type = 'bandpass';
+  banda.Q.value = 0.7;
+  banda.frequency.setValueAtTime(700, t);
+  banda.frequency.exponentialRampToValueAtTime(3400, t + 0.16);
+  banda.frequency.exponentialRampToValueAtTime(1100, t + dur);
+
+  const corte = ctx.createBiquadFilter();   // fuera los graves, que suenan a golpe
+  corte.type = 'highpass';
+  corte.frequency.value = 500;
+
+  const volumen = ctx.createGain();
+  volumen.gain.setValueAtTime(0.0001, t);
+  volumen.gain.linearRampToValueAtTime(0.05, t + 0.06);
+  volumen.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+  fuente.connect(banda).connect(corte).connect(volumen).connect(ctx.destination);
+  fuente.start(t);
+  fuente.stop(t + dur);
+}
+
+
+// ══════════════════════════════════════════════════════════
 //  DÍA Y NOCHE
 // ══════════════════════════════════════════════════════════
 const vistaPublica = document.getElementById('view-public');
@@ -1914,7 +1987,12 @@ document.addEventListener('keydown', e => {
 // ══════════════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════════════
+vistaPublica.classList.add('entrando');
 renderShelf();
+setTimeout(() => {
+  vistaPublica.classList.remove('entrando');
+  document.querySelectorAll('.book-spine').forEach(b => { b.style.animationDelay = ''; });
+}, 3200);
 
 // En móvil la escena es más ancha que la pantalla: centra el librero
 (function centrarLibrero() {
